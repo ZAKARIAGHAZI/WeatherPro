@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WeatherPro</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <div class="logo">
+          <i class="fas fa-cloud-sun"></i>
+          WeatherPro
+        </div>
+        <div class="search-container">
+          <input
+            type="text"
+            class="search-input"
+            placeholder="Search for a city..."
+            id="cityInput"
+          />
+          <button class="search-btn" id="searchBtn">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+        <div class="header-buttons">
+          <button id="unitToggle" class="unit-toggle">°F</button>
+          <div class="toggle-theme" id="themeToggle">🌓</div>
+        </div>
+      </header>
+
+      <div class="card" id="weatherCard">
+        <h3 id="location">Loading...</h3>
+        <div class="weather-icon" id="weatherIcon">☁️</div>
+        <h1 id="temperature"></h1>
+        <p id="description"></p>
+        <div class="details">
+          <div><strong id="feelsLike"></strong><br />Feels like</div>
+          <div><strong id="humidity"></strong><br />Humidity</div>
+          <div><strong id="wind"></strong><br />Wind</div>
+          <div><strong id="pressure"></strong><br />Pressure</div>
+        </div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -101,6 +101,7 @@ const getWeather = async (lat, lon, city = "") => {
     currentWeatherData = data;
     updateDisplay();
     await fetchHourlyForecast(lat, lon, city);
+    await fetchDailyForecast(lat, lon, city);
   } catch (err) {
     alert("Erreur de récupération des données météo.");
     console.error(err);
@@ -136,7 +137,20 @@ document.getElementById("unitToggle").addEventListener("click", () => {
   isCelsius = !isCelsius;
   document.getElementById("unitToggle").textContent = isCelsius ? "°F" : "°C";
   updateDisplay();
+
+  // Redraw forecasts using the new unit
+  const city = document.getElementById("cityInput").value.trim();
+  if (city) {
+    getWeather(null, null, city); // If a city is entered
+  } else if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) =>
+        getWeather(position.coords.latitude, position.coords.longitude),
+      () => getWeather(null, null, "Paris")
+    );
+  }
 });
+
 
 // 3hour forcaste
 
@@ -164,7 +178,7 @@ const fetchHourlyForecast = async (lat, lon, city = "") => {
         ? `${Math.round(item.main.temp)}°C`
         : `${Math.round((item.main.temp * 9) / 5 + 32)}°F`;
       
-      const weather = item.weather[0].main; // ✅ Use forecast weather, not current
+      const weather = item.weather[0].main; 
       const icon = weatherIconMap[weather] || "";
 
       const card = document.createElement("div");
@@ -182,3 +196,75 @@ const fetchHourlyForecast = async (lat, lon, city = "") => {
     console.error("Hourly forecast error:", err);
   }
 };
+
+
+
+// 5day forcaste
+
+
+const fetchDailyForecast = async (lat, lon, city = "") => {
+  const container = document.getElementById("dailyForecastList");
+  container.innerHTML = `<div class="loading-container"><div class="loading"></div><span>Loading daily forecast...</span></div>`;
+
+  const unit = isCelsius ? "metric" : "imperial";
+  const unitSymbol = isCelsius ? "°C" : "°F";
+
+  let url = city
+    ? `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=${unit}&lang=en`
+    : `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=${unit}&lang=en`;
+
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    const groupedDays = {};
+
+    data.list.forEach((entry) => {
+      const date = new Date(entry.dt * 1000);
+      const dayKey = date.toISOString().split("T")[0];
+
+      if (!groupedDays[dayKey]) groupedDays[dayKey] = [];
+      groupedDays[dayKey].push(entry);
+    });
+
+    container.innerHTML = "";
+
+    const today = new Date().getDay();
+    const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const dayKeys = Object.keys(groupedDays).slice(0, 5);
+
+    dayKeys.forEach((key, index) => {
+      const entries = groupedDays[key];
+      const temps = entries.map((e) => e.main.temp);
+      const tempMin = Math.round(Math.min(...temps));
+      const tempMax = Math.round(Math.max(...temps));
+
+      const midIndex = Math.floor(entries.length / 2);
+      const weather = entries[midIndex].weather[0];
+      const icon = weatherIconMap[weather.main] || "❓";
+      const desc = capitalize(weather.description);
+
+      const dayName = index === 0 ? "Today" : weekDays[(today + index) % 7];
+
+      const row = document.createElement("div");
+      row.className = "forecast-row";
+      row.innerHTML = `
+        <div class="forecast-left">${dayName}</div>
+        <div class="forecast-right">
+          <div class="forecast-icon">${icon}</div>
+          <div class="forecast-desc">${desc}</div>
+          <div class="forecast-temps">${tempMax}${unitSymbol} <span style="color:#666;">${tempMin}${unitSymbol}</span></div>
+        </div>
+      `;
+      container.appendChild(row);
+    });
+  } catch (err) {
+    console.error("Forecast error:", err);
+    container.innerHTML = "<div>Error loading daily forecast.</div>";
+  }
+};
+
+
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+

@@ -132,6 +132,15 @@ document.getElementById("cityInput").addEventListener("keypress", function (e) {
   }
 });
 
+// serach icon 
+document.getElementById("searchBtn").addEventListener("click", () => {
+  const cityInput = document.getElementById("cityInput");
+  const city = cityInput.value.trim();
+  if (city) {
+    getWeather(null, null, city);
+  }
+});
+
 // Unit toggle
 document.getElementById("unitToggle").addEventListener("click", () => {
   isCelsius = !isCelsius;

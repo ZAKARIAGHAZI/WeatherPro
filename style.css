@@ -7,6 +7,22 @@
   --card-bg-dark: #2b2b3c;
 }
 
+.weather-sunny {
+  background: linear-gradient(135deg, #87ceeb 0%, #ffd700 100%);
+}
+.weather-cloudy {
+  background: linear-gradient(135deg, #87ceeb 0%, #b0c4de 100%);
+}
+.weather-rainy {
+  background: linear-gradient(135deg, #4682b4 0%, #708090 100%);
+}
+.weather-stormy {
+  background: linear-gradient(135deg, #483d8b 0%, #8b0000 100%);
+}
+.weather-snowy {
+  background: linear-gradient(135deg, #f0f8ff 0%, #e6e6fa 100%);
+}
+
 body {
   margin: 0;
   font-family: "Segoe UI", sans-serif;
@@ -55,44 +71,41 @@ body.dark {
 }
 
 .search-container {
-    flex: 1;
-    max-width: 400px;
-    position: relative;
+  flex: 1;
+  max-width: 400px;
+  position: relative;
 }
 
 .search-input {
-    width: 100%;
-    padding: 12px 15px 12px 15px;
-    border: none;
-    border-radius: 25px;
-    background: var(--card-bg);
-    color: var(--primary-text);
-    font-size: 16px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 4px 15px var(--shadow);
+  width: 100%;
+  padding: 12px 0px 12px 15px;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  backdrop-filter: blur(10px);
 }
 
 .search-btn {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    color: var(--secondary-text);
-    cursor: pointer;
-    padding: 5px;
+  position: absolute;
+  right: 0px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--secondary-text);
+  cursor: pointer;
+  padding: 5px;
 }
 
 .unit-toggle {
-  padding: 10px 16px;
+  padding: 14px 16px;
   margin-left: 10px;
   border: none;
   border-radius: 20px;
   background-color: #fff;
   font-weight: bold;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: background-color 0.3s;
 }
 .toggle-theme,
 .unit-toggle {
@@ -127,7 +140,7 @@ body.dark .toggle-theme {
   padding: 30px;
   border-radius: 20px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.742);
-  transition: background 0.3s;
+  transition: background-color 0.3s;
 }
 
 body.dark .card {
@@ -140,16 +153,96 @@ body.dark .card {
 }
 
 .details {
-  display: flex;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 2 columns by default */
+  gap: 1rem;
   margin-top: 20px;
   text-align: center;
 }
 
 .details div {
-  margin: 10px;
-  flex: 1 1 45%;
+  padding: 10px;
+  border-radius: 8px;
   min-width: 120px;
+}
+
+/* Hourly Forecast Section */
+.hourly-section {
+  max-width: 1080px;
+  margin: 40px auto;
+  background: var(--card-bg-light);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.742);
+  transition: background-color 0.3s;
+}
+.section-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  color: inherit;
+}
+
+.hourly-scroll {
+  display: flex;
+  overflow-x: auto;
+  gap: 12px;
+  padding: 10px 0;
+  scroll-snap-type: x mandatory;
+}
+
+.hour-card {
+  scroll-snap-align: start;
+  min-width: 90px;
+  background-color: var(--card-bg-light);
+  border-radius: 12px;
+  padding: 10px;
+  text-align: center;
+  color: var(--text-light);
+  font-size: 0.9rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark .hour-card {
+  background-color: var(--card-bg-dark);
+  color: var(--text-dark);
+}
+
+.hour-card img {
+  width: 40px;
+  height: 40px;
+}
+
+/* Loading Spinner */
+.loading-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.95rem;
+  color: inherit;
+}
+
+.loading {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(0, 0, 0, 0.2);
+  border-top: 3px solid var(--text-light);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+body.dark .loading {
+  border-top-color: var(--text-dark);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 768px) {
@@ -162,8 +255,7 @@ body.dark .card {
   }
 
   .details {
-    flex-direction: column;
-    align-items: center;
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .details div {
@@ -183,6 +275,9 @@ body.dark .card {
 @media (max-width: 480px) {
   .header {
     flex-direction: column;
+  }
+  .details {
+    grid-template-columns: repeat(1, 1fr);
   }
 
   .search {

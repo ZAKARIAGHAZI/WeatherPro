@@ -221,6 +221,33 @@ body.dark .hour-card {
   width: 40px;
   height: 40px;
 }
+/* chart hourly forecast */
+.chart-section {
+  max-width: 1080px;
+  margin: 40px auto;
+  padding: 30px;
+  background: var(--card-bg-light);
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.742);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark .chart-section {
+  background: var(--card-bg-dark);
+  color: var(--text-dark);
+}
+
+.chart-card {
+  position: relative;
+  width: 100%;
+  overflow-x: auto;
+}
+
+#forecastChart {
+  width: 100% !important;
+  max-height: 240px;
+}
+
 
 /* Loading Spinner */
 .loading-container {
@@ -309,7 +336,7 @@ body.dark .forecast-row {
 /* footer  */
 
 .footer {
-  background-color: #1e1e2f; /* dark background */
+  background-color: #1e1e2f; 
   color: #ccc;
   padding: 15px 0;
   text-align: center;
@@ -319,7 +346,7 @@ body.dark .forecast-row {
 }
 
 .footer a {
-  color: #ffd700; /* bright gold */
+  color: #ffd700;
   text-decoration: none;
 }
 

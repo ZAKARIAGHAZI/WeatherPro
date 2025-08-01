@@ -199,6 +199,8 @@ const fetchHourlyForecast = async (lat, lon, city = "") => {
       `;
       container.appendChild(card);
     });
+
+    renderForecastChart(data);
   } catch (err) {
     container.innerHTML =
       "<div>Erreur de chargement des prévisions horaires.</div>";
@@ -277,3 +279,71 @@ function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+
+
+let forecastChartInstance = null;
+
+const renderForecastChart = (forecastData) => {
+  const labels = forecastData.list.slice(0, 8).map((item) => {
+    const date = new Date(item.dt * 1000);
+    return date.getHours().toString().padStart(2, "0") + ":00";
+  });
+
+  const temps = forecastData.list.slice(0, 8).map((item) => {
+    if (isCelsius) {
+      return Math.round(item.main.temp);
+    } else {
+      // Convert to Fahrenheit
+      return Math.round((item.main.temp * 9) / 5 + 32);
+    }
+  });
+
+  const ctx = document.getElementById("forecastChart").getContext("2d");
+
+  // Destroy previous chart instance if exists to avoid duplicates
+  if (forecastChartInstance) {
+    forecastChartInstance.destroy();
+  }
+
+  forecastChartInstance = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: `Temperature (${isCelsius ? "°C" : "°F"})`,
+          data: temps,
+          borderColor: "rgba(75, 192, 192, 1)",
+          backgroundColor: "rgba(75, 192, 192, 0.2)",
+          fill: true,
+          tension: 0.3,
+          pointRadius: 4,
+          pointHoverRadius: 7,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: false,
+          title: {
+            display: true,
+            text: `Temperature (${isCelsius ? "°C" : "°F"})`,
+          },
+        },
+        x: {
+          title: {
+            display: true,
+            text: "Time",
+          },
+        },
+      },
+      plugins: {
+        legend: { display: true },
+        tooltip: { enabled: true },
+      },
+    },
+  });
+};
+ 

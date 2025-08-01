@@ -47,6 +47,7 @@
         </div>
       </div>
 
+      <!-- 3-hour Forecast -->
       <div class="hourly-section">
         <div class="section-title">
           <i class="fas fa-clock"></i>
@@ -59,6 +60,14 @@
           </div>
         </div>
       </div>
+
+      <section class="chart-section">
+        <h2 class="section-title">3-Hour Temperature Forecast</h2>
+        <div class="chart-card">
+          <canvas id="forecastChart" height="180"></canvas>
+        </div>
+      </section>
+
 
       <!-- 7-Day Forecast -->
       <div class="section forecast-card">
@@ -85,6 +94,8 @@
         </p>
       </div>
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script.js"></script>
   </body>
 </html>

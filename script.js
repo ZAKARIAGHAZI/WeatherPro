@@ -324,6 +324,8 @@ const renderForecastChart = (forecastData) => {
     },
     options: {
       responsive: true,
+      maintainAspectRatio: false,
+      responsiveAnimationDuration: 300,
       scales: {
         y: {
           beginAtZero: false,

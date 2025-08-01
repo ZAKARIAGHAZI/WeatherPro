@@ -222,6 +222,8 @@ body.dark .hour-card {
   height: 40px;
 }
 /* chart hourly forecast */
+
+
 .chart-section {
   max-width: 1080px;
   margin: 40px auto;
@@ -240,11 +242,14 @@ body.dark .chart-section {
 .chart-card {
   position: relative;
   width: 100%;
+  height: auto;
   overflow-x: auto;
+  padding: 10px 0;
 }
 
 #forecastChart {
-  width: 100% !important;
+  width: 100% ;
+  height: auto;
   max-height: 240px;
 }
 
@@ -271,6 +276,8 @@ body.dark .loading {
   border-top-color: var(--text-dark);
 }
 /* daily forcaste */
+
+
 .forecast-card {
   max-width: 1080px;
   margin: 40px auto;
